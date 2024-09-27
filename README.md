@@ -8,25 +8,25 @@ pip install git+https://github.com/geovis-datacloud/geovis-cloud-api-python.git
 
 2 DataCloudSign使用
 ```bash
-from geovis_cloud_api_python import CertificationSign
+from geovis_cloud_api_python import DataCloudSign
 import uuid
 from datetime import datetime
 
-certificationSign = CertificationSign('your secretId', 'your secretKey')
+dataCloudSign = DataCloudSign('your secretId', 'your secretKey')
 
-path = '/v1/cloudapi/certification/industry'
+path = '/v1/cloudapi/application/publics'
 method = 'GET'
 body = None # body为空时，传None
 queryString = 'key1=value1&key2=value2' # 无查询参数时，传空字符串
 nonceStr = str(uuid.uuid4())
 timestamp = str(round(datetime.now().timestamp() * 1000))
 # 获取签名请求头 
-headers = certificationSign.sign(path, method, body, queryString, nonceStr, timestamp)
+headers = dataCloudSign.sign(path, method, body, queryString, nonceStr, timestamp)
 # 请求接口
-url = f'https://api1-dev.geovisearth.com/daas/certification-dev{path}'
+url = f'https://datacloud1.geovisearth.com{path}'
 if (queryString):
     url = f'{url}?{queryString}'
-result = certificationSign.request(url, method, headers, body)
+result = dataCloudSign.request(url, method, headers, body)
 ```
 
 3 CertificationSign使用
