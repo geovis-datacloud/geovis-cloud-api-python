@@ -17,7 +17,7 @@ certificationSign = CertificationSign('your secretId', 'your secretKey')
 path = '/v1/cloudapi/certification/industry'
 method = 'GET'
 body = None # body为空时，传None
-queryString = 'key1=value1&key2&value2' # 无查询参数时，传空字符串
+queryString = 'key1=value1&key2=value2' # 无查询参数时，传空字符串
 nonceStr = str(uuid.uuid4())
 timestamp = str(round(datetime.now().timestamp() * 1000))
 # 获取签名请求头 
