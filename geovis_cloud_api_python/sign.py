@@ -19,7 +19,7 @@ class CloudApiSign(object):
         if (body == None):
             body = ''
         else:
-            body = json.dumps(body, ensure_ascii=False).replace(' ', '')
+            body = json.dumps(body, ensure_ascii=False, separators=(',', ':'))
 
         stringToSign = self.serviceName + "\n" + method + "\n" + path + "\n" + queryString + "\n" + body + "\n" + nonceStr + "\n" + timestamp
         secretKey = base64.b64decode(self.secretKey)
@@ -33,7 +33,7 @@ class CloudApiSign(object):
         if (body == None):
             body = ''
         else:
-            body = json.dumps(body, ensure_ascii=False).replace(' ', '')
+            body = json.dumps(body, ensure_ascii=False, separators=(',', ':'))
         response = requests.request(method, url, headers=headers, data=body)
         return response.text
 
