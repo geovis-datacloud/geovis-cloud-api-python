@@ -57,6 +57,35 @@ from geovis_cloud_api_python import PaymentSign
 import uuid
 from datetime import datetime
 
+path = '/v2/access/prepay'
+method = 'POST'
+# body为空时，传None
+body = {
+    'orderNo': 'test_2024092500001113',
+    'productName': '测试商品',
+    'total': 1,
+    'payMode': 'wxpay',
+    'payChannel': 'NATIVE',
+    'callbackUrl': 'http://www.baidu.com?ad=12',
+    'userId': 'test_userid_xxxxxxxx_yyyyyyyyyyyyy'
+}
+queryString = '' # 无查询参数时，传空字符串
+url = f'https://api1.geovisearth.com/pay{path}'
+nonceStr = str(uuid.uuid4())
+timestamp = str(round(datetime.now().timestamp() * 1000))
+
+payment = PaymentSign('your secretId', 'your secretKey', 'your mchid')
+headers = payment.sign(path, method, body, queryString, nonceStr, timestamp)
+
+result = payment.request(url, method, headers, body)
+```
+
+5 InvoiceSign使用
+```bash
+from geovis_cloud_api_python import InvoiceSign
+import uuid
+from datetime import datetime
+
 path = '/v1/invoice'
 method = 'POST'
 # body为空时，传None
@@ -81,12 +110,12 @@ body = {
     ]
 }
 queryString = '' # 无查询参数时，传空字符串
-url = f'https://api1.geovisearth.com/pay{path}'
+url = f'https://api1.geovisearth.com/invoicecenter{path}'
 nonceStr = str(uuid.uuid4())
 timestamp = str(round(datetime.now().timestamp() * 1000))
 
-payment = PaymentSign('your secretId', 'your secretKey', 'your mchid')
-headers = payment.sign(path, method, body, queryString, nonceStr, timestamp)
+invoiceSign = InvoiceSign('your secretId', 'your secretKey', 'your mchid')
+headers = invoiceSign.sign(path, method, body, queryString, nonceStr, timestamp)
 
-result = payment.request(url, method, headers, body)
+result = invoiceSign.request(url, method, headers, body)
 ```
