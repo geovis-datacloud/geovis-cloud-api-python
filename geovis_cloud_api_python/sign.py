@@ -24,10 +24,13 @@ class CloudApiSign(object):
         stringToSign = self.serviceName + "\n" + method + "\n" + path + "\n" + queryString + "\n" + body + "\n" + nonceStr + "\n" + timestamp
         secretKey = base64.b64decode(self.secretKey)
         signature = hmac.new(secretKey, stringToSign.encode('utf-8'), hashlib.sha256).hexdigest()
-        return {
-            'Content-Type': 'application/json',
+
+        header = {
             'authorization': f'secretId={self.secretId},nonceStr={nonceStr},service={self.serviceName},timestamp={timestamp},signature={signature}{self.getExtendParam(self.extendKeys)}'
         }
+        if (body):
+            header['Content-Type'] = 'application/json'
+        return header
     
     def request(self, url: str, method: str, headers: object, body: object|None):
         if (body == None):
@@ -35,7 +38,7 @@ class CloudApiSign(object):
         else:
             body = json.dumps(body, ensure_ascii=False, separators=(',', ':'))
         response = requests.request(method, url, headers=headers, data=body)
-        return response.text
+        return json.loads(response.text)
 
     def getExtendParam(self, extendKeys):
         result = ''
@@ -55,3 +58,7 @@ class CertificationSign(CloudApiSign):
 class DataCloudSign(CloudApiSign): 
     def __init__(self, secretId, secretKey) -> None:
         super().__init__(secretId, secretKey, 'geovis-data-cloud', None)
+
+class InvoiceSign(CloudApiSign): 
+    def __init__(self, secretId, secretKey, mchid) -> None:
+        super().__init__(secretId, secretKey, 'geovis-invoice-center', [['mchid', mchid]])
