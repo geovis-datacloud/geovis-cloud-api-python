@@ -114,8 +114,8 @@ url = f'https://api1.geovisearth.com/invoicecenter{path}'
 nonceStr = str(uuid.uuid4())
 timestamp = str(round(datetime.now().timestamp() * 1000))
 
-payment = PaymentSign('your secretId', 'your secretKey', 'your mchid')
-headers = payment.sign(path, method, body, queryString, nonceStr, timestamp)
+invoiceSign = InvoiceSign('your secretId', 'your secretKey', 'your mchid')
+headers = invoiceSign.sign(path, method, body, queryString, nonceStr, timestamp)
 
-result = payment.request(url, method, headers, body)
+result = invoiceSign.request(url, method, headers, body)
 ```
